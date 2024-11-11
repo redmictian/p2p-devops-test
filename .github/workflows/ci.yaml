@@ -1,0 +1,37 @@
+name: Update Tag POC
+
+on:
+  workflow_dispatch:
+
+env:
+  KUBE_REPO_NAME: p2p-kube-charts
+  APP_NAME: p2p
+  QA_TAG: qa
+
+
+jobs:
+  update-tag-qa:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout ${{ env.KUBE_REPO_NAME }}
+        uses: actions/checkout@v3
+        with:
+          repository: redmictian/${{ env.KUBE_REPO_NAME }}
+          token: ${{ secrets.KUBE_REPO_TOKEN }}
+          path: ${{ env.KUBE_REPO_NAME }}
+
+      - name: Update Tag
+        run: |
+          cd ${{ env.KUBE_REPO_NAME }}
+          sed -i 's/tag: .*/tag: ${{ env.QA_TAG }}/' env/qa/p2p.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          cd ${{ env.KUBE_REPO_NAME }}
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image tag to ${{ env.QA_TAG }}"
+          git push origin develop
