@@ -25,7 +25,6 @@ jobs:
       - name: Update Tag
         run: |
           cd ${{ env.KUBE_REPO_NAME }}
-#          sed -i 's/tag: .*/tag: ${{ env.QA_TAG }}/' env/qa/p2p.yaml
           echo "adding:tag" >> env/qa/p2p.yaml
 
       - name: Commit and Push Changes
