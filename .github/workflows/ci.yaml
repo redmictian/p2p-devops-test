@@ -32,7 +32,6 @@ jobs:
           cd ${{ env.KUBE_REPO_NAME }}
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git checkout develop
           git add .
           git commit -m "Update image tag to ${{ env.QA_TAG }}"
           git push origin develop
