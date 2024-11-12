@@ -7,7 +7,6 @@ env:
   KUBE_REPO_NAME: p2p-kube-charts
   APP_NAME: p2p
 
-
 jobs:
   update-tag-qa:
     runs-on: ubuntu-latest
@@ -30,8 +29,7 @@ jobs:
       - name: Update Tag
         run: |
           cd ${{ env.KUBE_REPO_NAME }}
-          sed -i 's/tag: .*/tag: '"${{ env.QA_TAG }}"'/' env/qa/${{ env.APP_NAME }}.yaml
-          
+          sed -i "s/tag: .*/tag: $QA_TAG/" env/qa/${{ env.APP_NAME }}.yaml
 
       - name: Commit and Push Changes
         run: |
@@ -39,5 +37,5 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Update image tag to ${{ env.QA_TAG }}"
+          git commit -m "Update image tag to $QA_TAG"
           git push origin develop
