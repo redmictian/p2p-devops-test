@@ -26,11 +26,14 @@ jobs:
           QA_TAG=$(date '+%Y%m%d-%H%M%S')
           echo "QA_TAG=${QA_TAG}" >> $GITHUB_ENV
 
+      - name: Install yq
+        run: |
+          sudo apt-get update && sudo apt-get install -y yq
+  
       - name: Update Tag
         run: |
           cd ${{ env.KUBE_REPO_NAME }}
-          echo "The tag is $QA_TAG"
-          sed -i "s/^\s*tag: .*/tag: $QA_TAG/" env/qa/${{ env.APP_NAME }}.yaml
+          yq eval ".image.tag = \"${QA_TAG}\"" -i env/qa/${{ env.APP_NAME }}.yaml
 
       - name: Commit and Push Changes
         run: |
