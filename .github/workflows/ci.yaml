@@ -30,7 +30,7 @@ jobs:
       - name: Update Tag
         run: |
           cd ${{ env.KUBE_REPO_NAME }}
-          sed -i 's/tag: .*/tag: '"${QA_TAG}"'/' env/qa/p2p.yaml
+          sed -i 's/tag: .*/tag: '"${{ env.QA_TAG }}"'/' env/qa/${{ env.APP_NAME }}.yaml
           
 
       - name: Commit and Push Changes
@@ -38,7 +38,6 @@ jobs:
           cd ${{ env.KUBE_REPO_NAME }}
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git checkout develop
           git add .
           git commit -m "Update image tag to ${{ env.QA_TAG }}"
           git push origin develop
