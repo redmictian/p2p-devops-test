@@ -28,7 +28,9 @@ jobs:
 
       - name: Install yq
         run: |
-          sudo apt-get update && sudo apt-get install -y yq
+          wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 -O yq
+          chmod +x yq
+          sudo mv yq /usr/local/bin/yq
   
       - name: Update Tag
         run: |
