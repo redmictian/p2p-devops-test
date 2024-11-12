@@ -6,7 +6,6 @@ on:
 env:
   KUBE_REPO_NAME: p2p-kube-charts
   APP_NAME: p2p
-  QA_TAG: qa
 
 
 jobs:
@@ -23,10 +22,16 @@ jobs:
           path: ${{ env.KUBE_REPO_NAME }}
           ref: develop
 
+      - name: Tag Generation
+        run: |
+          QA_TAG=$(date '+%Y%m%d-%H%M%S')
+          echo "QA_TAG=${QA_TAG}" >> $GITHUB_ENV
+
       - name: Update Tag
         run: |
           cd ${{ env.KUBE_REPO_NAME }}
-          echo "adding:tag" >> env/qa/p2p.yaml
+          sed -i 's/tag: .*/tag: '"${QA_TAG}"'/' env/qa/p2p.yaml
+          
 
       - name: Commit and Push Changes
         run: |
