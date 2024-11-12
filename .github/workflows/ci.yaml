@@ -1,6 +1,9 @@
 name: Update Tag POC
 
 on:
+  push:
+    branches:
+      - develop
   workflow_dispatch:
 
 env:
