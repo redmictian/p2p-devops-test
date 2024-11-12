@@ -1,0 +1,47 @@
+name: Update Tag POC
+
+on:
+  workflow_dispatch:
+
+env:
+  KUBE_REPO_NAME: p2p-kube-charts
+  APP_NAME: p2p
+
+jobs:
+  update-tag-qa:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout ${{ env.KUBE_REPO_NAME }}
+        uses: actions/checkout@v3
+        with:
+          repository: redmictian/${{ env.KUBE_REPO_NAME }}
+          token: ${{ secrets.KUBE_REPO_TOKEN }}
+          path: ${{ env.KUBE_REPO_NAME }}
+          ref: develop
+
+      - name: Tag Generation
+        run: |
+          QA_TAG=$(date '+%Y%m%d-%H%M%S')
+          echo "QA_TAG=${QA_TAG}" >> $GITHUB_ENV
+
+      - name: Install yq
+        run: |
+          wget https://github.com/mikefarah/yq/releases/download/v4.34.1/yq_linux_amd64 -O yq
+          chmod +x yq
+          sudo mv yq /usr/local/bin/yq
+  
+      - name: Update Tag
+        run: |
+          cd ${{ env.KUBE_REPO_NAME }}
+          yq eval ".image.tag = \"${QA_TAG}\"" -i env/qa/${{ env.APP_NAME }}.yaml
+
+      - name: Commit and Push Changes
+        run: |
+          cd ${{ env.KUBE_REPO_NAME }}
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Update image tag to $QA_TAG"
+          git push origin develop
