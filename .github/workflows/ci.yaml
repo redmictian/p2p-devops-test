@@ -21,6 +21,7 @@ jobs:
           repository: redmictian/${{ env.KUBE_REPO_NAME }}
           token: ${{ secrets.KUBE_REPO_TOKEN }}
           path: ${{ env.KUBE_REPO_NAME }}
+          ref: develop
 
       - name: Update Tag
         run: |
