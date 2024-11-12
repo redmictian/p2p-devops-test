@@ -29,7 +29,7 @@ jobs:
       - name: Update Tag
         run: |
           cd ${{ env.KUBE_REPO_NAME }}
-          sed -i "s/tag: .*/tag: $QA_TAG/" env/qa/${{ env.APP_NAME }}.yaml
+          sed -i "s/^\s*tag: .*/tag: $QA_TAG/" env/qa/${{ env.APP_NAME }}.yaml
 
       - name: Commit and Push Changes
         run: |
